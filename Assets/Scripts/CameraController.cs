@@ -30,40 +30,44 @@ public class CameraController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+
     {
-        //いったんプレイヤーのX座標、Y座標の位置を変数に取得
-        x = player.transform.position.x;
-        y = player.transform.position.y;
+        if (player != null)
+        {
+            //いったんプレイヤーのX座標、Y座標の位置を変数に取得
+            x = player.transform.position.x;
+            y = player.transform.position.y;
 
-        if (isScrollX)
-        {
-            x = transform.position.x + (scrollSpeedX * Time.deltaTime);
-        }
+            if (isScrollX)
+            {
+                x = transform.position.x + (scrollSpeedX * Time.deltaTime);
+            }
 
-        if (x < leftLimit)
-        {
-            x = leftLimit;
-        }
-        else if (x > rightLimit)
-        {
-            x = rightLimit;
-        }
+            if (x < leftLimit)
+            {
+                x = leftLimit;
+            }
+            else if (x > rightLimit)
+            {
+                x = rightLimit;
+            }
 
-        if (isScrollY)
-        {
-            y = transform.position.y + (scrollSpeedY * Time.deltaTime);
-        }
+            if (isScrollY)
+            {
+                y = transform.position.y + (scrollSpeedY * Time.deltaTime);
+            }
 
-        if (y < bottomLimit)
-        {
-            y = bottomLimit;
-        }
-        else if (y > topLimit)
-        {
-            y = topLimit;
-        }
+            if (y < bottomLimit)
+            {
+                y = bottomLimit;
+            }
+            else if (y > topLimit)
+            {
+                y = topLimit;
+            }
 
-        //取り決めた各変数x,y,zの値をカメラのポジションとする
-        transform.position = new Vector3(x, y, z);
+            //取り決めた各変数x,y,zの値をカメラのポジションとする
+            transform.position = new Vector3(x, y, z);
+        }
     }
 }

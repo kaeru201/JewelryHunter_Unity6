@@ -2,13 +2,20 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    public static string gameState;
+
+    private void Awake()
+    {
+        //ƒQ[ƒ€‚Ì‰Šúó‘Ô‚ğplaying
+        gameState = "playing";
+    }
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
         
