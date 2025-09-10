@@ -1,9 +1,11 @@
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
-
+    
     public GameObject mainImage;
     public GameObject buttonPanel;
 
@@ -12,9 +14,16 @@ public class UIController : MonoBehaviour
 
     public Sprite gameClearSprite;
     public Sprite gameOverSprite;
+
+    TimeController timeCnt;
+    public GameObject timeText;
+
     
+     
     void Start()
     {
+        timeCnt = GetComponent<TimeController>();
+
         buttonPanel.SetActive(false);//ë∂ç›ÇîÒï\é¶
 
         //éûä‘Ç≥
@@ -40,7 +49,22 @@ public class UIController : MonoBehaviour
             mainImage.GetComponent<Image>().sprite = gameOverSprite;
 
             nextButton.GetComponent<Button>().interactable = false;
+
         }
+
+        else if (GameManager.gameState == "playing")
+        {
+            float times = timeCnt.displayTime;
+            timeText.GetComponent<TextMeshProUGUI>().text = Mathf.Ceil(times).ToString();
+
+                
+        }
+
+        
+
+
+
+       
     }
 
     void InactiveImage()

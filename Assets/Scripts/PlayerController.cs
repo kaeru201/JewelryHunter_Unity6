@@ -124,6 +124,12 @@ public class PlayerController : MonoBehaviour
             GameOver();
         }
 
+        if(collision.gameObject.CompareTag("ItemScore"))
+        {
+            GameManager.stageScore += collision.gameObject.GetComponent<ItemData>().value;
+            Destroy(collision.gameObject);
+        }
+
     }
 
     public void Goal()
