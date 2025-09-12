@@ -13,8 +13,7 @@ public class ItemData : MonoBehaviour
     public ItemColor colors = ItemColor.White;
     public Sprite[] itemSprites;
 
-    public int value = 0;
-
+    public int value = 0;       // ®”’l‚ğİ’è‚Å‚«‚é
 
     void Start()
     {
@@ -34,13 +33,6 @@ public class ItemData : MonoBehaviour
             case ItemColor.Red:
                 spriteRenderer.sprite = itemSprites[3];
                 break;
-
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

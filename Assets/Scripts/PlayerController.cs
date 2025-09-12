@@ -16,19 +16,28 @@ public class PlayerController : MonoBehaviour
     bool goJump = false; //ジャンプフラグ（true:真on、false:偽off)
     bool onGround = false; //地面にいるかどうかの判定（地面にいる：true、地面にいない：false）
 
+    AudioSource audio;
+    public AudioClip se_Jump;
+    public AudioClip se_ItemGet;
+    public AudioClip se_Damage;
+
     void Start()
     {
         rbody = GetComponent<Rigidbody2D>(); //Playerについているコンポーネント情報を取得
 
         animator = GetComponent<Animator>();//Animatorコンポーネントの情報を代入
+
+        audio = GetComponent<AudioSource>();
     }
 
     void Update()
     {
+        //ゲームのステータスがplayingでないなら
         if (GameManager.gameState != "playing")
         {
-            return;//その1フレームを強制終了
+            return; //その1フレームを強制終了
         }
+
 
         //Velocityの元となる値の取得（右なら1.0f、左なら-1.0f、なにもなければ0)
         axisH = Input.GetAxisRaw("Horizontal");
@@ -55,11 +64,11 @@ public class PlayerController : MonoBehaviour
     //1秒間に50回(50fps)繰り返すように制御しながら行う繰り返しメソッド
     void FixedUpdate()
     {
+        //ゲームのステータスがplayingでないなら
         if (GameManager.gameState != "playing")
         {
-            return;//その1フレームを強制終了
+            return; //その1フレームを強制終了
         }
-
 
         //地面判定をサークルキャストで行って、その結果を変数onGroundに代入
         onGround = Physics2D.CircleCast(
@@ -99,6 +108,8 @@ public class PlayerController : MonoBehaviour
     {
         if (onGround)
         {
+            audio.PlayOneShot(se_Jump);
+
             goJump = true; //ジャンプフラグをON
             animator.SetTrigger("Jump");
         }
@@ -116,46 +127,53 @@ public class PlayerController : MonoBehaviour
             Goal();
         }
 
-        //ぶつかった相手が
+        //ぶつかった相手が"Dead"タグを持っていたら
         if (collision.gameObject.CompareTag("Dead"))
         {
+            audio.PlayOneShot(se_Damage);
+
             GameManager.gameState = "gameover";
-            Debug.Log("ゲームオーバー!");
+            Debug.Log("ゲームオーバー！");
             GameOver();
         }
 
-        if(collision.gameObject.CompareTag("ItemScore"))
+        //アイテムに触れたらステージスコアに加算
+        if (collision.gameObject.CompareTag("ItemScore"))
         {
+            audio.PlayOneShot(se_ItemGet);
+
             GameManager.stageScore += collision.gameObject.GetComponent<ItemData>().value;
             Destroy(collision.gameObject);
         }
-
     }
 
+    //ゴールした時のメソッド
     public void Goal()
     {
-        animator.SetBool("Clear", true);//クリアアニメに切り替え
-        GameStop();
+        animator.SetBool("Clear", true); //クリアアニメに切り替え
+        GameStop();　//プレイヤーのVelocityを止めるメソッド
     }
 
+    //ゲームオーバーの時のメソッド
     public void GameOver()
     {
-        animator.SetBool("Dead", true);
+        animator.SetBool("Dead", true); //デッドアニメに切り替え
         GameStop();
 
-        //
+        //当たり判定を無効
         GetComponent<CapsuleCollider2D>().enabled = false;
 
+        //少し上に飛び跳ねさせる
         rbody.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
 
-        //プレイヤーを3秒後んい抹消
+        //プレイヤーを3秒後に抹消
         Destroy(gameObject, 3.0f);
     }
 
     void GameStop()
     {
         //速度を0にリセット
-        //rbody.linearVelocity = new Vector2 (0, 0);
+        //rbody.linearVelocity = new Vector2(0, 0);
         rbody.linearVelocity = Vector2.zero;
     }
 
